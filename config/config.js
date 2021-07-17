@@ -1,9 +1,9 @@
 const env = process.env;
 
 const development = {
-    "username": "jangwoopark",
-    "password": "pc112400pjw3",
-    "database": "hopcalendar2.0",
+    "username": env.POSTGRES_USERNAME,
+    "password": env.POSTGRES_PASSWORD,
+    "database": env.POSTGRES_DATABASE,
     "host": "localhost",
     "dialect": "postgres"
 }
