@@ -14,7 +14,7 @@ class App {
 
         this.setMiddleWare();
 
-        this.getRouting();
+        // this.getRouting();
 
     }
 
