@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     info: DataTypes.STRING
   }, {
     sequelize,
+    tableName: 'tasks',
     modelName: 'Task',
   });
   return Task;
