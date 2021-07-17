@@ -14,10 +14,25 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Task.init({
-    id: DataTypes.INTEGER,
-    type: DataTypes.STRING,
-    deadline: DataTypes.STRING,
-    info: DataTypes.STRING
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: true,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    deadline: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    info: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
   }, {
     sequelize,
     tableName: 'tasks',

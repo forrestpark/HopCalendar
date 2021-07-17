@@ -14,12 +14,33 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Course.init({
-    id: DataTypes.INTEGER,
-    admins: DataTypes.STRING,
-    instructor: DataTypes.STRING,
-    classNumber: DataTypes.STRING,
-    tasks: DataTypes.STRING,
-    name: DataTypes.STRING
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: true,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    admins: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    instructor: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    classNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    tasks: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   }, {
     sequelize,
     tableName: 'courses',

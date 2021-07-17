@@ -14,12 +14,33 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Student.init({
-    id: DataTypes.INTEGER,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    name: DataTypes.STRING,
-    courses: DataTypes.STRING,
-    completedTasks: DataTypes.STRING
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: true,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    courses: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    completedTasks: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
   }, {
     sequelize,
     tableName: 'students',
