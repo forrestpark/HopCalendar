@@ -639,7 +639,9 @@ app.post('/getcourses', async (req, res) => {
         const reqBody = req.body
         const role = reqBody.role
         console.log("role: ", role)
+        conssole.log("reqbody id: ", reqBody.id)
         const id = parseInt(reqBody.id)
+        console.log("id: ", id)
         let user = null
         if (role == 'student' || role == 'Student') {
             console.log("is a student")
