@@ -1,3 +1,3 @@
-const BASE_URL = 'http://localhost:3000'
-//const BASE_URL = 'https://immense-garden-94246.herokuapp.com'
+// const BASE_URL = 'http://localhost:3000'
+const BASE_URL = 'https://hopcalendar.herokuapp.com/'
 export { BASE_URL }
