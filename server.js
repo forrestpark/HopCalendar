@@ -638,13 +638,17 @@ app.post('/getcourses', async (req, res) => {
     try {
         const reqBody = req.body
         const role = reqBody.role
+        console.log("role: ", role)
         const id = parseInt(reqBody.id)
         let user = null
         if (role == 'student' || role == 'Student') {
+            console.log("is a student")
             user = await Student.findByPk(id)
         } else {
+            console.log("is not a student")
             user = await Instructor.findByPk(id)
         }
+        console.log("user: ", user)
         const courses = user.dataValues.courses
         console.log("get courses, courses: ", courses)
         if (courses == '') {
