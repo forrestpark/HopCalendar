@@ -16,6 +16,7 @@ console.log("process.env.PORT: ", process.env.PORT)
         // adding dummy data
 
         const admins = [1]
+        const courses = [1,2]
         const tasks1 = [1, 2]
         const tasks2 = [3, 4]
         const tasks3 = [5, 6]
@@ -94,6 +95,9 @@ console.log("process.env.PORT: ", process.env.PORT)
             name: "design"
         })
 
+        console.log("course1.dataValues.id: ", course1.dataValues.id)
+        console.log("course1.id: ", course1.id)
+
         const course2 = await Course.create({
             admins: "1",
             instructor: "1",
@@ -104,14 +108,14 @@ console.log("process.env.PORT: ", process.env.PORT)
 
         const jane = await Student.create({
             name: 'Jane',
-            courses: course2.toString(),
+            courses: courses.toString(),
             email: 'janedoe@jhu.edu',
             password: 'hellokitty',
             completedTasks: '',
         })
         const darvish = await Instructor.create({
             name: 'Darvish',
-            courses: course1.toString(),
+            courses: courses.toString(),
             email: 'darvish@jhu.edu',
             password: 'computer',
         })
@@ -639,7 +643,7 @@ app.post('/getcourses', async (req, res) => {
         const reqBody = req.body
         const role = reqBody.role
         console.log("role: ", role)
-        conssole.log("reqbody id: ", reqBody.id)
+        console.log("reqbody id: ", reqBody.id)
         const id = parseInt(reqBody.id)
         console.log("id: ", id)
         let user = null
@@ -652,6 +656,7 @@ app.post('/getcourses', async (req, res) => {
         }
         console.log("user: ", user)
         const courses = user.dataValues.courses
+        console.log("courses: ", courses)
         console.log("get courses, courses: ", courses)
         if (courses == '') {
             console.log("empty course array")
