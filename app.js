@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 // const { sequelize } = require('./models')
+
 // db 관련
 const db = require('./models');
 
