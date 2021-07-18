@@ -113,6 +113,13 @@ console.log("process.env.PORT: ", process.env.PORT)
             password: 'hellokitty',
             completedTasks: '',
         })
+        const jangwoo = await Student.create({
+            name: 'Jang Woo',
+            courses: courses.toString(),
+            email: 'jpark278@jhu.edu',
+            password: 'hellokitty',
+            completedTasks: '',
+        })
         const darvish = await Instructor.create({
             name: 'Darvish',
             courses: courses.toString(),
