@@ -133,18 +133,22 @@ app.get('/', async (req, res) => {
 app.post('/login', async (req, res) => {
     //get email, password and role
     try {
+        console.log("logging in")
         var userInfo = req.body
+        console.log("user info: ", userInfo)
         var email = userInfo.email
         var pw = userInfo.password
         var role = userInfo.role
         let query = null
         if (role == 'Student' || role == 'student') {
+            console.log("is a student")
             query = await Student.findAll({
                 where: {
                     email: email,
                     password: pw,
                 },
             })
+            console.log("query: ", query)
         } else {
             query = await Instructor.findAll({
                 where: {

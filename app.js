@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 // const { sequelize } = require('./models')
 // db 관련
@@ -43,6 +44,7 @@ class App {
         this.app.use(express.json());
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
+        this.app.use(cors());
 
     }
         
