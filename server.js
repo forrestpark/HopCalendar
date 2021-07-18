@@ -87,17 +87,17 @@ console.log("process.env.PORT: ", process.env.PORT)
 
         // creating dummy course objects
         const course1 = await Course.create({
-            admins: 1,
-            instructor: 1,
-            classNumber: 502,
+            admins: "1",
+            instructor: "1",
+            classNumber: "502",
             tasks: alltasks.toString(),
             name: "design"
         })
 
         const course2 = await Course.create({
-            admins: 1,
-            instructor: 1,
-            classNumber: 601,
+            admins: "1",
+            instructor: "1",
+            classNumber: "601",
             tasks: alltasks.toString(),
             name: "JAVA"
         })
