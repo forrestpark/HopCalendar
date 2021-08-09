@@ -210,6 +210,7 @@ export default {
                     email: this.email
                 }
             )
+            alert(response.data)
             if (response.data == false) {
                 this.validInput = false
             } else {
@@ -246,8 +247,12 @@ export default {
                 await this.checkExistingEmail()
                 await this.checkValidPassword()
 
+                // alert("validation check done")
+
                 if (this.validJHEDEmail && this.validInput && this.validPassword) {
+                    // alert("yes, all inputs are valid")
                     this.code = Math.floor(Math.random() * 90000) + 10000
+                    // alert(this.code)
 
                     // email this number to the user
                     /* SmtpJS.com - v3.0.0 */
@@ -277,19 +282,25 @@ export default {
                                 var t = new XMLHttpRequest; return "withCredentials" in t ? t.open(e, n, !0) : "undefined" != typeof XDomainRequest ? (t = new XDomainRequest).open(e, n) : t = null, t 
                         } 
                     };
+
+                    // alert("about to send email")
                 
                     Email.send({
-                        Host : "smtp.gmail.com",
-                        Username : "fantasticsniffle@gmail.com",
-                        Password : "fan12345!",
+                        Host : "smtp.elasticemail.com",
+                        Username : "hopcalendar.jhu@gmail.com",
+                        Password : "74F6D3E7D906A4BEF046F1BD9D1733910AB5",
                         To : this.email,
-                        From : "fantasticsniffle@gmail.com",
+                        From : "hopcalendar.jhu@gmail.com",
                         Subject : "HopCalendar: Here's Your Code to Finish Setting Up Your Account",
                         Body : this.code
                     }).then(
                         //show dialog box to have user enter code
                         this.dialogCodeVisible = true
                     );
+                    alert(Email.code)
+                    alert(this.code)
+                    // alert("email sent!")
+
                 } /*else {
                     this.$message({
                         message: 'Please fill out all fields',

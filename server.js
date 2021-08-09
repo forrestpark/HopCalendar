@@ -15,6 +15,8 @@ console.log("process.env.PORT: ", process.env.PORT)
     try {
         // adding dummy data
 
+        await db.sequelize.sync({force: true});
+
         const admins = [1]
         const courses = [1,2]
         const tasks1 = [1, 2]
@@ -116,7 +118,7 @@ console.log("process.env.PORT: ", process.env.PORT)
         const jangwoo = await Student.create({
             name: 'Jang Woo',
             courses: courses.toString(),
-            email: 'jpark278@jhu.edu',
+            email: 'jpark27@jhu.edu',
             password: 'hellokitty',
             completedTasks: '',
         })
@@ -185,6 +187,7 @@ app.post('/create_account', async (req, res) => {
     //first get email, password, role, name from front end
     try {
         var userInfo = req.body
+        console.log("create account reqbody")
         var reqName = userInfo.name
         var reqEmail = userInfo.email
         var reqPw = userInfo.password
@@ -193,6 +196,7 @@ app.post('/create_account', async (req, res) => {
         if (role == "potentialinstructor") {
             userCourses = userInfo.courses
         }
+        console.log("create account 1")
         
         //create a new user based on the role
         if (role == 'Student' || role == 'student') {
@@ -210,8 +214,10 @@ app.post('/create_account', async (req, res) => {
                 password: reqPw,
             })
         }
+        console.log("create account done")
         res.sendStatus(200)
     } catch (error) {
+        console.log("create account error")
         res.sendStatus(500)
     }
     
@@ -279,6 +285,9 @@ app.post('/getEmailAddress', async (req, res) => {
         if (existingStudEmailAddress.length == 0 && existingInstrEmailAddress.length == 0) {
             validEmailAddress = true
         }
+        console.log("existingStudEmailAddress: ", existingStudEmailAddress)
+        console.log("existingInstrEmailAddress: ", existingInstrEmailAddress)
+        console.log(validEmailAddress)
         res.send(validEmailAddress)
     } catch (error) {
         res.sendStatus(500)
