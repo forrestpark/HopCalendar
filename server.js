@@ -205,6 +205,7 @@ app.post('/create_account', async (req, res) => {
                 courses: '',
                 email: reqEmail,
                 password: reqPw,
+                completedTasks: ''
             })
         } else {
             await Instructor.create({
@@ -285,9 +286,6 @@ app.post('/getEmailAddress', async (req, res) => {
         if (existingStudEmailAddress.length == 0 && existingInstrEmailAddress.length == 0) {
             validEmailAddress = true
         }
-        console.log("existingStudEmailAddress: ", existingStudEmailAddress)
-        console.log("existingInstrEmailAddress: ", existingInstrEmailAddress)
-        console.log(validEmailAddress)
         res.send(validEmailAddress)
     } catch (error) {
         res.sendStatus(500)

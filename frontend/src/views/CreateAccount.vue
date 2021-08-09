@@ -210,7 +210,6 @@ export default {
                     email: this.email
                 }
             )
-            alert(response.data)
             if (response.data == false) {
                 this.validInput = false
             } else {
@@ -247,12 +246,8 @@ export default {
                 await this.checkExistingEmail()
                 await this.checkValidPassword()
 
-                // alert("validation check done")
-
                 if (this.validJHEDEmail && this.validInput && this.validPassword) {
-                    // alert("yes, all inputs are valid")
                     this.code = Math.floor(Math.random() * 90000) + 10000
-                    // alert(this.code)
 
                     // email this number to the user
                     /* SmtpJS.com - v3.0.0 */
@@ -282,8 +277,6 @@ export default {
                                 var t = new XMLHttpRequest; return "withCredentials" in t ? t.open(e, n, !0) : "undefined" != typeof XDomainRequest ? (t = new XDomainRequest).open(e, n) : t = null, t 
                         } 
                     };
-
-                    // alert("about to send email")
                 
                     Email.send({
                         Host : "smtp.elasticemail.com",
@@ -297,8 +290,6 @@ export default {
                         //show dialog box to have user enter code
                         this.dialogCodeVisible = true
                     );
-                    alert(Email.code)
-                    alert(this.code)
                     // alert("email sent!")
 
                 } /*else {
