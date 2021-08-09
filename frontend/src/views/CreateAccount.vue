@@ -290,7 +290,7 @@ export default {
                         //show dialog box to have user enter code
                         this.dialogCodeVisible = true
                     );
-                    // alert("email sent!")
+                    alert("Our email verficiation is currently unstable; here's the code in case you do not receive any in your inbox. Code: ", this.code)
 
                 } /*else {
                     this.$message({
