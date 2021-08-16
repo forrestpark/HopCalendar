@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="frontend/HopCalendarLogoWhite.png" alt="hopcalendar_logo" width="100%"/>
+</p>
+
 # HopCalendar
 HopCalendar is an assignment/deadline aggregator that helps students stay on top of their deadlines during online learning. 
 HopCalendar also helps teachers maintain student engagement through remote learning. Our deadline aggregator is in the form of a monthly view calendar that has indicators for any upcoming deadlines and assignments. 
