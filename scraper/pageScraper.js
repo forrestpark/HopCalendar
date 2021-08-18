@@ -48,7 +48,7 @@ async function login(page, url, my_id, my_pw) {
 
 async function scraper(browser, my_id, my_pw, my_type) {
     const gradescope_year = 'Spring 2021'
-    const blackboard_year = 'FA20'
+    const blackboard_year = 'SP21'
     const blackboard_course_query = '#toggle_other_' + blackboard_year
     try {
         if (my_type == "gradescope") {
@@ -188,10 +188,46 @@ async function scraper(browser, my_id, my_pw, my_type) {
         }
         else if (my_type == "blackboard") {
             let url = 'https://blackboard.jhu.edu/webapps/login/sm/index.jsp?new_loc=/webapps/login'
-            let page = (await browser.pages())[0]
-            page = login(page,url,my_id,my_pw)
-            console.log("logging in to blackboard")
-
+            var page = await browser.newPage()
+            try {
+                console.log(`Navigating to ${url}...`)
+        
+                await page.goto(url)
+                console.log("page goto")
+                var scrapedData = []
+        
+                //logging in through school authorization
+                await page.waitForSelector('div.form-group.col-md-24')
+                await page.type('#i0116', my_id, { delay: 100 })
+                await page.waitForSelector('#idSIButton9')
+                await page.focus('#idSIButton9')
+                await page.click('#idSIButton9')
+        
+                await page.waitForSelector('div.form-group.col-md-24')
+                await page.type('#i0118', my_pw)
+                await page.waitFor(4000)
+                //await page.waitForSelector('#idSIButton9');
+                await page.focus('#idSIButton9')
+                await page.click('#idSIButton9')
+                // Wait for the required DOM to be rendered
+                        
+                console.log(page.url())
+                        
+                let page_dummy = await browser.newPage()
+                await page_dummy.goto('https://www.google.com')
+                await page_dummy.close()
+                await delay(2000)
+                let str = page.url()
+                if (str.substring(str.length - 6) == "/login") {
+                    console.log("waiting triggered...")
+                    await delay(5000)
+                }
+                console.log(page.url())
+                console.log("login successful")
+            } catch (err) {
+                console.log(err)
+            }
+            console.log("logged into blackboard")
 
             //inside blackboard
             await page.waitForSelector('#loginBox-JHU')
@@ -199,9 +235,9 @@ async function scraper(browser, my_id, my_pw, my_type) {
             console.log("click")
             //in blackboard
             //get course ids for select semester
-            await page.waitForSelector('#toggle_other_FA20')
+            await page.waitForSelector(blackboard_course_query)
             let course_urls = await page.$$eval(
-                '#toggle_other_FA20 > tbody > tr > td > span > a ',
+                blackboard_course_query + ' > tbody > tr > td > span > a ',
                 (links) => {
                     links = links.map((el) => el.href)
                     return links
@@ -209,7 +245,7 @@ async function scraper(browser, my_id, my_pw, my_type) {
             )
 
             console.log(course_urls)
-            let course_ids = []
+            var course_ids = []
             for (let course_url of course_urls) {
                 let c_index = course_url.indexOf("id=") + 3;
                 let course_id = course_url.substring(c_index)
@@ -218,7 +254,7 @@ async function scraper(browser, my_id, my_pw, my_type) {
 
             console.log(course_ids);
 
-            let urls = []
+            var urls = []
             for (let course_id of course_ids) {
                 let link = "https://blackboard.jhu.edu/webapps/bb-mygrades-bb_bb60/myGrades?course_id="
                 + course_id + "&stream_name=mygrades"
@@ -237,7 +273,8 @@ async function scraper(browser, my_id, my_pw, my_type) {
                             (text) => text.textContent
                         )
                     } catch (error) {
-                        dataObj['courseName'] = "unsupported"
+                        console.log(error)
+                        // dataObj['courseName'] = "unsupported"
                     }
                     console.log("verify:" + verify);
                     if (verify && verify.indexOf('Due') >= 0) {
