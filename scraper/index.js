@@ -8,7 +8,7 @@ const scraperController = require('./pageController');
 
 async function startScraper(id, pw, type) {
     //Start the browser and create a browser instance
-    let browserInstance = await startBrowser()
+    var browserInstance = await startBrowser()
     // console.log("browser instance")
     // Pass the browser instance to the scraper controller
     const data = await scraperController(browserInstance, id, pw, type)
