@@ -1,3 +1,6 @@
+// import startScraper from './scraper/index.js'
+
+const startScraper = require('./scraper/index.js')
 const app = require('./app.js');
 const port = process.env.PORT || 3000;
 const db = require('./models');
@@ -187,7 +190,6 @@ app.post('/create_account', async (req, res) => {
     //first get email, password, role, name from front end
     try {
         var userInfo = req.body
-        console.log("create account reqbody")
         var reqName = userInfo.name
         var reqEmail = userInfo.email
         var reqPw = userInfo.password
@@ -196,7 +198,6 @@ app.post('/create_account', async (req, res) => {
         if (role == "potentialinstructor") {
             userCourses = userInfo.courses
         }
-        console.log("create account 1")
         
         //create a new user based on the role
         if (role == 'Student' || role == 'student') {
@@ -729,6 +730,119 @@ app.post('/get_tasks', async (req, res) => {
         res.send({ taskArray })
     } catch (error) {
         res.sendStatus(500)
+    }
+    
+})
+
+// endpoint login => find which student it is 
+app.post('/gradescope_scraper', async (req, res) => {
+    //get username, password and rolefrom req object role
+    try {
+        var userInfo = req.body
+        var name = userInfo.username
+        var pw = userInfo.password
+        var type = userInfo.type
+        let data = null
+        var total_new_tasks = 0;
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        const year = "2020"
+        data = await startScraper(name, pw, type)
+        console.log("data in backend: ", data)
+        if (!data) {
+            res.sendStatus(500).end();
+        }
+        //we call gradescope scraper
+        //scraper data organized as -- coursename(1 element) - taskname(n elements) - task due dates (n) - blob (1 element - fixed as scraped from gradescope)
+        for (let i = 0; i < data.length; i++) {
+            let course, tasknames, taskduedates, taskblob = null;
+            let coursenumber = data[i]['courseName']
+            if (coursenumber != "unsupported") {
+                tasknames = data[i]['taskName']
+                taskduedates = data[i]['taskDue']
+                taskblob = data[i]['taskBlob']
+            //     //query course using coursename (prob need to think abt this as well but most courses follow a similar format
+            //     // either xxx.xxx or EN xxx.xxx or EN xxx.xxx/yyy) => so just get numbers and disregard any letters; also when / exists, ignore anything that comes after (as of now)
+                console.log("course number: ", coursenumber)
+                let courses = await Course.findAll({
+                    where: {
+                        classNumber: coursenumber
+                    }
+                })
+                course = courses[0]  
+            }
+
+            console.log("course: ", course)
+            
+            // check if course already exists
+            // if it does not exist in db, create one
+            if (!course) {
+                console.log("course does not exist")
+                course = await Course.create({
+                    admins: "",
+                    instructor: "",
+                    classNumber: coursenumber,
+                    tasks: "",
+                    name: coursenumber
+                })
+            }
+
+            if (course) {
+                let taskArray = course.dataValues.tasks.split(',')
+                if (taskArray.length < tasknames.length) {
+                    let num_new_tasks = tasknames.length - taskArray.length;
+                    total_new_tasks += num_new_tasks;
+                    for (let i = 0; i < num_new_tasks; i++) {
+                        var newTask;
+                        try {
+                            if (type == "gradescope") {
+                                console.log("creating...")
+                                console.log(taskduedates[i]);
+                                let timeArray = taskduedates[i].split(" ");
+                                let month = months.indexOf(timeArray[0]) + 1;
+                                let day = timeArray[1];
+                                newTask = await Task.create({
+                                    type: tasknames[i],
+                                    deadline: month + "/" + day + "/" + year,
+                                    info: taskblob,
+                                });
+                                console.log("new gradescrope task created")
+                            } else if (type == "blackboard") {
+                                console.log("creating...")
+                                console.log(taskduedates[i]);
+                                let timeArray = taskduedates[i].replace(',','').split(" ");
+                                let month = months.indexOf(timeArray[1]) + 1;
+                                let day = timeArray[2];
+                                newTask = await Task.create({
+                                    type: tasknames[i],
+                                    deadline: month + "/" + day + "/" + year,
+                                    info: taskblob,
+                                });
+                            }
+                        }
+                        catch (error) {
+                            console.log("failed to create an item...")
+                            continue
+                        }
+                        let taskId = newTask.dataValues.id
+                        let courseId = course.dataValues.id
+                        taskArray.push(`${taskId}`)
+                        await Course.update(
+                            { tasks: taskArray.toString() },
+                            {
+                                where: {
+                                    id: courseId,
+                                },
+                            }
+                        )
+                    }
+                }
+            }
+        
+        }
+        res.sendStatus(200)
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500).end();
     }
     
 })
