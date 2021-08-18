@@ -11,6 +11,7 @@ async function startBrowser() {
         console.log('Opening the browser......')
         browser = await puppeteer.launch({
             headless: true,
+            // args added so that puppeteer runs on Heroku
             args: ['--no-sandbox', '--disable-setuid-sandbox', '--single-process', '--no-zygote'],
             ignoreHTTPSErrors: true,
         })
